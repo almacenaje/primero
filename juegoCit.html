@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Citología</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        #game-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .question {
+            margin: 20px 0;
+            font-size: 18px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 200px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #score {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Juego de Citología</h1>
+        <div class="question" id="question"></div>
+        <div class="options" id="options"></div>
+        <div id="score"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "¿Cuál es la unidad básica de la vida?",
+                options: ["El átomo", "La célula", "El tejido", "El órgano"],
+                answer: 1
+            },
+            {
+                question: "¿Qué parte de la célula actúa como su 'cerebro'?",
+                options: ["Mitocondria", "Núcleo", "Membrana celular", "Citoplasma"],
+                answer: 1
+            },
+            {
+                question: "¿Cuál de estos NO es un tipo de célula?",
+                options: ["Célula animal", "Célula vegetal", "Célula mineral", "Célula bacteriana"],
+                answer: 2
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+
+            questionElement.textContent = questions[currentQuestion].question;
+            optionsElement.innerHTML = '';
+
+            questions[currentQuestion].options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index);
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            if (selectedIndex === questions[currentQuestion].answer) {
+                score++;
+                document.getElementById('score').textContent = `¡Correcto! Puntuación: ${score}`;
+            } else {
+                document.getElementById('score').textContent = `Incorrecto. La respuesta correcta es: ${questions[currentQuestion].options[questions[currentQuestion].answer]}`;
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+                setTimeout(loadQuestion, 1000);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('question').textContent = 'Juego terminado';
+                    document.getElementById('options').innerHTML = '';
+                    document.getElementById('score').textContent = `Puntuación final: ${score} de ${questions.length}`;
+                }, 1000);
+            }
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
